@@ -1,0 +1,6 @@
+RETRIEVE_LLAMA='retrieve_llama'
+RETRIEVE_MAXBAI='retrieve_maxbai'
+RETRIEVE_Recursive='retrieve_maxbai'
+GRADE_DOCUMENTS='grade_documents'
+GENERATE_LLAMA='generate_llama'
+GENERATE_RECURSIVE='generate_recursive'
