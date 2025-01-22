@@ -1,8 +1,9 @@
 from dotenv import load_dotenv
 from langgraph.graph import END, StateGraph
-from  Agent.consts import RETRIEVE_LLAMA,RETRIEVE_MAXBAI,RETRIEVE_Recursive,  GRADE_DOCUMENTS, GENERATE_LLAMA, GENERATE_RECURSIVE
+from  Agent.consts import RETRIEVE_LLAMA,RETRIEVE_MAXBAI,RETRIEVE_Recursive,  GRADE_DOCUMENTS, GENERATE_LLAMA, GENERATE_RECURSIVE, ENHANCE_QUERY
 from Agent.nodes.retriver import StateRetrieveLLAMA, StateRetrieveMaxbai, StateRetrieveRecursive
 from Agent.nodes.generation import generate_llama, generate_recursive 
+from Agent.nodes.enhance_query import generate_query
 from Agent.nodes.grade_documents import grade_documents
 from Agent.state import GraphState
 from Agent.chain.hallucination import  hallucination_grader
@@ -52,7 +53,7 @@ def route_question(state:GraphState):
         return RETRIEVE
 
 # stateretrievellama=StateRetrieveLLAMA("knowledgebase","llama_embed_knolwdge")
-stateretrievellama=StateRetrieveLLAMA("knowledgebase2","spacy_embed_knolwdge")
+stateretrievellama=StateRetrieveLLAMA("knowledgespacy","demospacy")
 
 # stateretrievemaxbai= StateRetrieveMaxbai("knowledgebase","maxbai_embed_knolwdge")
 stateretrieverecursive=StateRetrieveRecursive("knowledgebase","recursive_embed_knolwdge")
@@ -62,14 +63,15 @@ workflow.add_node(RETRIEVE_LLAMA, stateretrievellama.retrieve)
 
 # workflow.add_node(RETRIEVE_Recursive, stateretrieverecursive.retrieve)
 workflow.add_node(GRADE_DOCUMENTS, grade_documents)
+# workflow.add_node(ENHANCE_QUERY,generate_query)
 workflow.add_node(GENERATE_LLAMA, generate_llama)
 # workflow.add_node(GENERATE_RECURSIVE, generate_recursive)
 # workflow.add_node(GENERATE_LLAMA, tavily_web_search)
 # workflow.add_node(GENERATE_LLAMA, tavily_web_search)
-
 workflow.set_entry_point(RETRIEVE_LLAMA)
-workflow.add_edge(RETRIEVE_LLAMA, GENERATE_LLAMA)
-# workflow.add_edge(GRADE_DOCUMENTS, GENERATE_LLAMA)
+# workflow.add_edge(ENHANCE_QUERY,RETRIEVE_LLAMA)
+workflow.add_edge(RETRIEVE_LLAMA, GRADE_DOCUMENTS)
+workflow.add_edge(GRADE_DOCUMENTS, GENERATE_LLAMA)
 # workflow.set_conditional_entry_point(
 #     route_question,
 #     {
