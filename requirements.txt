@@ -7,3 +7,5 @@ langchain_chroma
 chromadb
 spacy
 streamlit
+langchain_experimental
+pypdf
