@@ -59,7 +59,7 @@ class DBCreation():
         #     response = self.embedding.embeddings(model="mxbai-embed-large", prompt=d)
         #     embedding = response["embedding"]
         # print(self.db_name)
-        print(len(chunks))
+        # print(len(chunks))
         client = chromadb.PersistentClient(path="knowledgebase")
         collection = client.create_collection(
             name="hrcolection"
