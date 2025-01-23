@@ -12,7 +12,7 @@ from langchain_community.embeddings.spacy_embeddings import SpacyEmbeddings
 class DBCreation():
     def __init__(self,folder_path,url):
         self.folder_path=folder_path
-        self.embedding=SpacyEmbeddings(model_name="en_core_web_sm")#OllamaEmbeddings(model="llama3.2:1b",base_url=url)
+        self.embedding=SpacyEmbeddings(model_name="en_core_web_md")#OllamaEmbeddings(model="llama3.2:1b",base_url=url)
         # self.embedding2=OllamaEmbeddings(model="mxbai-embed-large",base_url=url)
         # self.db_name=dbname
         # self.db=DB(dbname)
