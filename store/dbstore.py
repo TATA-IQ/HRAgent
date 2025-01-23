@@ -27,8 +27,8 @@ class DBCreation():
                 resultantpdf.extend(loader.load())
                 
         return resultantpdf
-    def create_sementic_data_spacy(self):
-        alldocs=self.load_files()
+    def create_sementic_data_spacy(self,doc):
+        alldocs=doc#self.load_files()
         
         
         semanticchunker=SemanticChunker(self.embedding, breakpoint_threshold_type="percentile")
@@ -51,7 +51,8 @@ class DBCreation():
     def create_knowledge_semantic_spacy(self,db_name="knowledgespacy2"):
         # collection=self.db.create_client()
         # chunks=self.create_sementic_data()
-        chunks=self.create_sementic_data_spacy()
+        files=os.listdir(self.folder_path)
+        # chunks=self.create_sementic_data_spacy()
         print("========embedding creationon llama==============")
         # print(chunks)
         # for  i,d in tqdm(chunks):
@@ -64,13 +65,21 @@ class DBCreation():
             name="hrcolection"
         )
         i=0
-        for ch in tqdm(chunks):
-            collection.add(
-                documents=[ch],
-                embeddings=self.embedding.embed_query(ch),
-                ids=str(i)
-            )
-            i=i+1
+
+        for fil in tqdm(files):
+            resultantpdf=[]
+            if ".pdf" in fil:
+                path=os.path.join(self.folder_path,fil)
+                loader=PyPDFLoader(path)
+                resultantpdf.extend(loader.load())
+            chunks=create_sementic_data_spacy(resultantpdf)
+            for ch in tqdm(chunks):
+                collection.add(
+                    documents=[ch],
+                    embeddings=self.embedding.embed_query(ch),
+                    ids=str(i)
+                )
+                i=i+1
         print("=====Spacy data created=======")
         # retriver_test=chroma_db.as_retriever().get_relevant_documents("finance vice persident of tata insights and quants")
         print("==============Test======")
