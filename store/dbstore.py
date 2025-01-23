@@ -72,7 +72,7 @@ class DBCreation():
                 path=os.path.join(self.folder_path,fil)
                 loader=PyPDFLoader(path)
                 resultantpdf.extend(loader.load())
-            chunks=create_sementic_data_spacy(resultantpdf)
+            chunks=self.create_sementic_data_spacy(resultantpdf)
             for ch in tqdm(chunks):
                 collection.add(
                     documents=[ch],
