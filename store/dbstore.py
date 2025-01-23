@@ -3,7 +3,7 @@ from langchain_chroma import Chroma
 from langchain_ollama import OllamaEmbeddings
 from langchain_experimental.text_splitter import SemanticChunker
 from langchain_text_splitters import RecursiveCharacterTextSplitter
-
+import chromadb
 import ollama
 import os
 from tqdm import tqdm
@@ -48,7 +48,7 @@ class DBCreation():
                 print(ex)
         return modified_chunks
     
-    def create_knowledge_semantic_spacy(self,db_name="knowledgespacy"):
+    def create_knowledge_semantic_spacy(self,db_name="knowledgespacy2"):
         # collection=self.db.create_client()
         # chunks=self.create_sementic_data()
         chunks=self.create_sementic_data_spacy()
@@ -59,16 +59,22 @@ class DBCreation():
         #     embedding = response["embedding"]
         # print(self.db_name)
         print(len(chunks))
-        chroma_db = Chroma.from_texts(
-                        texts=chunks[:99],
-                        embedding=self.embedding, 
-                        persist_directory=db_name, 
-                        collection_name="demospacy"
-                    )
+        client = chromadb.PersistentClient(path="knowledgebase")
+        collection = client.create_collection(
+            name="hrcolection"
+        )
+        i=0
+        for ch in tqdm(chunks):
+            collection.add(
+                documents=[ch],
+                embeddings=self.embedding.embed_query(ch),
+                ids=str(i)
+            )
+            i=i+1
         print("=====Spacy data created=======")
-        retriver_test=chroma_db.as_retriever().get_relevant_documents("finance vice persident of tata insights and quants")
+        # retriver_test=chroma_db.as_retriever().get_relevant_documents("finance vice persident of tata insights and quants")
         print("==============Test======")
-        print(retriver_test)
+        # print(retriver_test)
     
 
     

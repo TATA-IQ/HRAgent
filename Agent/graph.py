@@ -53,10 +53,10 @@ def route_question(state:GraphState):
         return RETRIEVE
 
 # stateretrievellama=StateRetrieveLLAMA("knowledgebase","llama_embed_knolwdge")
-stateretrievellama=StateRetrieveLLAMA("knowledgespacy","demospacy")
+stateretrievellama=StateRetrieveLLAMA("knowledgebase","hrcolection")
 
 # stateretrievemaxbai= StateRetrieveMaxbai("knowledgebase","maxbai_embed_knolwdge")
-stateretrieverecursive=StateRetrieveRecursive("knowledgebase","recursive_embed_knolwdge")
+# stateretrieverecursive=StateRetrieveRecursive("knowledgebase","recursive_embed_knolwdge")
 workflow=StateGraph(GraphState)
 workflow.add_node(RETRIEVE_LLAMA, stateretrievellama.retrieve)
 # workflow.add_node(RETRIEVE_MAXBAI, stateretrievemaxbai.retrieve)
